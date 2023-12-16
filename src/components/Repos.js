@@ -5,58 +5,28 @@ import { ExampleChart, Pie3D, Column3D, Bar3D, Doughnut2D } from './Charts';
 import { toContainHTML } from '@testing-library/jest-dom/dist/matchers';
 const Repos = () => {
   const {repos}=useContext(GithubContext)
-   let languajes=repos.reduce((total,item)=>{
-    const {languaje}=item
-    if (!languaje)return total
-    if (!total[languaje]){total[languaje]={label:languaje,value:1}}
-    else{total[languaje]={...total[languaje],value:total[languaje].value+1}
+   let languages=repos.reduce((total,item)=>{
+    const {language}=item
+    if (!language)return total
+    if (!total[language]){total[language]={label:language,value:1}}
+    else{total[language]={...total[language],value:total[language].value+1}
    }
     return total
    },{})
-  const chartData = [
-    {
-      label: "Venezuela",
-      value: "290",
-    },
-    {
-      label: "Saudi",
-      value: "260",
-    },
-    {
-      label: "Canada",
-      value: "180",
-    },
-    {
-      label: "Iran",
-      value: "140",
-    },
-    {
-      label: "Russia",
-      value: "115",
-    },
-    {
-      label: "UAE",
-      value: "100",
-    },
-    {
-      label: "US",
-      value: "30",
-    },
-    {
-      label: "China",
-      value: "30",
-    },
-  ]
+   languages=Object.values(languages).sort((a,b)=>{return a.value - b.value}).slice(0,5)
+  
 
+  
+  
   return <section className='section'>
 
       <Wrapper className='section-center'>
         {/* <ExampleChart data={chartData}/> */}
-        <Pie3D data={chartData}/>
+        <Pie3D data={languages}/>
       </Wrapper>
   </section>
   
-};
+}
 
 const Wrapper = styled.div`
   display: grid;
