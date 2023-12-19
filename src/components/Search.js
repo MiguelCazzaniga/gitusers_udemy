@@ -5,7 +5,7 @@ import { GithubContext } from '../context/context';
 
 const Search = () => {
   const [user,setUser]=useState('')
-  const {request,error,searchGithubUser}=useContext(GithubContext)
+  const {request,error,searchGithubUser,isLoading}=useContext(GithubContext)
   
   // get things from globalcontext
 const handleSubmit=(e,)=>{
@@ -39,7 +39,7 @@ const handleSubmit=(e,)=>{
               }}
               value={user}
             />
-            {request > 0 && <button type='submit' >search</button>}
+            {request > 0 && !isLoading &&(<button type='submit' >search</button>)}
           </div>
         </form>
         <h3>requests: {request}/45</h3>

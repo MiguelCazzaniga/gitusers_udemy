@@ -15,17 +15,32 @@ const GithubProvider=({children})=>{
     //request loading
     const [request,setRequest]=useState(0)
 
-    const [loading,setIsLoading]=useState(false)
+    const [isLoading,setIsLoading]=useState(false)
     const [error,setError]=useState({show:false,msg:''})
 
     const searchGithubUser=async(user)=>{
-       //toggle error
-       //set loading to true
+       toggleError()
+       setIsLoading(true)
+       console.log("direccion",`${rootUrl}/users/${user}`)
        const response=await axios(`${rootUrl}/users/${user}`)
             .catch(err => console.log(err))
-            console.log(response)
-            if (response){searchGithubUser(response.data)}
-            else{toggleError(true,'there is not user with this user')}
+           
+            if (response){
+               
+                setGithubUser(response.data)
+                const {login,followers_url}=response.data
+                //repos
+                axios(`${rootUrl}/users/${login}/repos?per_page=100`).then(reponse=>console.log(response))
+                console.log("response.data",response.data)
+                //setRepos(response.data)
+                //followers
+                axios(`${followers_url}?per_page=100`).then(
+                  setFollowers(response.data)
+                )
+                //
+            }else{toggleError(true,'there is not user with this user')}
+            checkRequest()
+            setIsLoading(false)
     }
 
     // check rate
@@ -45,7 +60,7 @@ const GithubProvider=({children})=>{
     function toggleError(show=false,msg=''){setError({show,msg})}
     useEffect(checkRequest,[])
     
-    return <GithubContext.Provider value={{githubUser,repos,followers,request,error,searchGithubUser}}>{children}</GithubContext.Provider>
+    return <GithubContext.Provider value={{githubUser,repos,followers,request,error,searchGithubUser,isLoading}}>{children}</GithubContext.Provider>
 }
 
 export {GithubProvider,GithubContext}
